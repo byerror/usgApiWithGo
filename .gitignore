@@ -1,0 +1,14 @@
+## ide
+**/.idea
+*.iml
+*.exe
+*.rar
+*.log
+## backend
+**/target
+**/logs
+
+## front
+**/*.lock
+
+ 

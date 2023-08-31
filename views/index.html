@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0,viewport-fit=cover">
+    <meta name="wechat-enable-text-zoom-em" content="true">
+    <title>控制中心</title>
+    <link rel="stylesheet" href="/staticx/weui-2.6.5/dist/style/weui.css" />
+    <link rel="stylesheet" href="/staticx/weuix/css/weuix.css" />
+    <link rel="stylesheet" href="/staticx/weui-2.6.5/dist/style/my.css" />
+
+    <script src="/staticx/weuix/js/zepto.min.js"></script>
+    <script src="/staticx/weuix/js/zepto.weui.js"></script>
+    <!--<script src="/staticx/weuix/js/php.js"></script> -->
+    <link rel="stylesheet" href="/staticx/mescroll/1.4.2/mescroll.min.css">
+    <script src="/staticx/mescroll/1.4.2/mescroll.min.js" charset="utf-8"></script>
+    <script src="/staticx/weuix/js/my.js"></script>
+
+    <script>
+        $(function () {
+
+
+            $('.status-bar').dblclick(function () {
+
+
+                $.ajax({
+                    type: "POST",
+                    url: '/',
+                    data: { "action": "{{ .Status }}" },
+                    dataType: "json",
+                    beforeSend: function () {
+                        //   $("#more").show();
+                    },
+                    success: (res) => {
+                        if (res.code == 0) {
+                            $.toptip('操作成功，3秒后刷新页面...', 'success')
+
+                            setTimeout(() => {
+                                location.reload()
+                            }, 3000)
+
+                        }
+                        else
+                            $.toptip(res.msg, 'error')
+                    },
+                    error: (xhr, status, msg) => {
+                        $.toptip(msg, 'error')
+                    },
+                    timeout: 15000
+                });
+
+            });
+
+
+
+            //-1表示获取策略状态失败
+            if ("{{ .Code }}" == "-1") {
+                $.toptip("{{ .Msg }}", 'error')
+            }
+
+
+        });
+
+    </script>
+</head>
+
+<body>
+    <!-- <div class="weui_cells_title">喜欢的爱好</div> -->
+    <!--下拉刷新-->
+    <!-- <div class="weui-pull-to-refresh__layer">
+        <div class='weui-pull-to-refresh__arrow'></div>
+        <div class='weui-pull-to-refresh__preloader'></div>
+        <div class="down">下拉刷新</div>
+        <div class="up">释放刷新</div>
+        <div class="refresh">正在刷新</div>
+    </div>  -->
+    <!--下拉刷新end-->
+
+
+    <div class="container" id="container">
+
+        <div class="page flex js_show" tabindex="-1">
+            <!-- <div class="page__hd">
+                <h1 class="page__title"></h1>
+                <p class="page__desc"> </p>
+            </div> -->
+
+            <div class="page__bd page__bd_spacing">
+
+
+                <!---report-->
+                <div class="weui-flex">
+                    <div class="weui-flex__item">
+                        <div class="report bg1">
+                            <div class="small-box">
+                                <div class="inner">
+                                    <h3>{{.DayPV}}</h3>
+                                </div>
+                                <div class="icon">
+                                    <i class="ion ion-bag"></i>
+                                </div>
+                            </div>
+                            <div class="small-box-footer">今日访问</div>
+                        </div>
+                    </div>
+                    <div class="weui-flex__item">
+                        <div class="report bg2">
+                            <div class="small-box">
+                                <div class="inner">
+                                    <h3>{{.TotalPV}}</h3>
+                                </div>
+                                <div class="icon">
+                                    <i class="ion ion-bag"></i>
+                                </div>
+                            </div>
+                            <div class="small-box-footer">累计访问</div>
+                        </div>
+                    </div>
+
+
+                </div>
+
+                <div class="weui-flex">
+                    <div class="weui-flex__item">
+                        <div class="report bg3">
+                            <div class="small-box">
+                                <div class="inner">
+                                    <h3>{{.OperTimes}}</h3>
+                                </div>
+                                <div class="icon">
+                                    <i class="ion ion-bag"></i>
+                                </div>
+                            </div>
+                            <div class="small-box-footer">操作次数</div>
+                        </div>
+                    </div>
+                    <div class="weui-flex__item">
+                        <div class="report bg6">
+                            <div class="small-box status-bar">
+                                <div class="inner">
+
+                                    <!-- <i class="weui-icon-warn weui-icon_msg"></i> -->
+                                    <!-- <i class="weui-icon-success weui-icon_msg btn"></i> -->
+                                    {{ if .Status }}
+                                    <span style="color:#dc3545;font-weight:700"><span
+                                            style="color:silver">{{.Now}}</span> 已阻断 </span>
+
+                                    {{ else }}
+
+                                    {{ if eq .Code 0 }}
+
+
+                                    <span style="color:#28a745;font-weight:700"><span
+                                            style="color:silver">{{.Now}}</span> 可连接 </span>
+                                    {{ else }}
+                                    <span style="color:#ffc107;font-weight:700"><span
+                                            style="color:silver">{{.Now}}</span> 未知 </span>
+                                    {{ end}}
+
+                                    {{ end }}
+
+                                </div>
+                                <div class="icon">
+                                    <i class="ion ion-bag"></i>
+                                </div>
+                            </div>
+
+                            <div class="small-box-footer">策略状态</div>
+                        </div>
+                    </div>
+
+
+                </div>
+
+
+
+
+                <!--report end---->
+
+
+                <!-- <a href="javascript:;" class="weui-btn weui-btn_primary" onclick="$.toptip('我是绿色提示','success')">success</a> -->
+
+
+
+
+
+
+                <!--table-->
+                <div class="weui-flex">
+                    <div class="weui-flex__item">
+                        <div class="weui-flex">
+
+                            <div class="weui-flex__item">
+                                <div class="placeholder">
+                                    <div> <span class="icon icon-67"></span>最近10次日志
+                                        {{ if .ServiceStatus }}
+                                        <span style="color: #28a745;font-size:14px;font-weight:600">*</span>
+                                        {{ else }}
+                                        <span style="color: #dc3545;font-size:14px;font-weight:600">*</span>
+                                        {{ end }}
+                                    </div>
+                                    <table class="weui-table weui-table-2n">
+                                        <thead>
+                                            <tr>
+                                                <th>时间</th>
+                                                <th>动作</th>
+                                                <th>结果</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {{ range .TbLogs}}
+                                            <tr>
+                                                <td title="时间">{{ .CreatedAt | FormatAsDate }}</td>
+                                                <td title="动作">{{ .Action }}</td>
+                                                <td title="结果">{{ .Result }}</td>
+                                            </tr>
+                                            {{ end }}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <!--table end-->
+
+
+
+
+
+
+
+
+
+
+
+
+            </div>
+
+        </div>
+    </div>
+
+
+
+
+</body>
+
+</html>

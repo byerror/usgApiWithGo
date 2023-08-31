@@ -1,0 +1,25 @@
+
+
+server:
+  #用于配置zap日志的模式
+  debug: true
+  #gin服务的端口
+  port: 9999
+database:
+  path: "E:\\case\\go\\src\\yongyou\\db.db"
+
+api: #restConf Api
+  #防火墙ip
+  ip: "192.168.1.1"
+  user: "test"
+  psw: "123fvv"
+  policy:
+    rule: "test"
+    # 策略模板 %t将会被替换为true,false  
+    template: "<rule><desc>test</desc><source-ip><address-ipv4>192.168.1.167/32</address-ipv4></source-ip><destination-ip><address-ipv4>172.16.0.223/32</address-ipv4></destination-ip><action>false</action><enable>%t</enable></rule>"
+
+
+monitor:
+  # 要监控的服务器IP
+  IP: "172.16.0.223"
+  port: 8088
